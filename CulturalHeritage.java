@@ -1,0 +1,317 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CulturalHeritage {
+    
+    // Heritage Site class
+    static class HeritageSite {
+        private int id;
+        private String name;
+        private String location;
+        private String state;
+        private int yearBuilt;
+        private String architecturalStyle;
+        private String description;
+        private String historicalSignificance;
+        
+        public HeritageSite(int id, String name, String location, String state, int yearBuilt, 
+                           String architecturalStyle, String description, String historicalSignificance) {
+            this.id = id;
+            this.name = name;
+            this.location = location;
+            this.state = state;
+            this.yearBuilt = yearBuilt;
+            this.architecturalStyle = architecturalStyle;
+            this.description = description;
+            this.historicalSignificance = historicalSignificance;
+        }
+        
+        // Getters
+        public int getId() { return id; }
+        public String getName() { return name; }
+        public String getLocation() { return location; }
+        public String getState() { return state; }
+        public int getYearBuilt() { return yearBuilt; }
+        public String getArchitecturalStyle() { return architecturalStyle; }
+        public String getDescription() { return description; }
+        public String getHistoricalSignificance() { return historicalSignificance; }
+        
+        @Override
+        public String toString() {
+            return String.format(
+                "🏛 %s\\n📍 %s, %s | 📅 %d CE\\n🏗 %s\\n📝 %s\\n📜 %s\\n",
+                name, location, state, yearBuilt, architecturalStyle, 
+                description, historicalSignificance
+            );
+        }
+    }
+    
+    // Heritage Manager class
+    static class HeritageManager {
+        private List<HeritageSite> sites;
+        private Scanner scanner;
+        
+        public HeritageManager() {
+            this.sites = new ArrayList<>();
+            this.scanner = new Scanner(System.in);
+            initializeSampleData();
+        }
+        
+        private void initializeSampleData() {
+            // Tamil Nadu Sites
+            sites.add(new HeritageSite(1, "Brihadeeswarar Temple", "Thanjavur", "Tamil Nadu", 1010,
+                "Dravidian Architecture", 
+                "The Brihadeeswarar Temple, also known as the Big Temple, is a Hindu temple dedicated to Shiva. It is one of the largest South Indian temples and an exemplary example of fully realized Tamil architecture.",
+                "UNESCO World Heritage Site, represents the golden age of Chola architecture"));
+                
+            sites.add(new HeritageSite(2, "Meenakshi Amman Temple", "Madurai", "Tamil Nadu", 1190,
+                "Dravidian Architecture",
+                "The Meenakshi Amman Temple is a historic Hindu temple dedicated to Meenakshi, a form of Parvati, and her consort, Sundareshwar, a form of Shiva.",
+                "One of the most prominent landmarks of Tamil Nadu, attracts thousands of visitors daily"));
+                
+            sites.add(new HeritageSite(3, "Mahabalipuram Group of Monuments", "Mahabalipuram", "Tamil Nadu", 700,
+                "Dravidian Architecture",
+                "A collection of 7th- and 8th-century CE religious monuments including rock-cut rathas, mandapas, giant open-air rock reliefs, and the Shore Temple.",
+                "UNESCO World Heritage Site, showcases Pallava dynasty art and architecture"));
+                
+            // Other Indian Sites
+            sites.add(new HeritageSite(4, "Taj Mahal", "Agra", "Uttar Pradesh", 1653,
+                "Mughal Architecture",
+                "An ivory-white marble mausoleum on the right bank of the Yamuna river, commissioned by Mughal emperor Shah Jahan.",
+                "UNESCO World Heritage Site, one of the Seven Wonders of the World"));
+                
+            sites.add(new HeritageSite(5, "Hampi Monuments", "Hampi", "Karnataka", 1336,
+                "Vijayanagara Architecture",
+                "Contains numerous ruined temple complexes from the Vijayanagara Empire including Virupaksha Temple and stone chariot.",
+                "UNESCO World Heritage Site, capital of the Vijayanagara Empire"));
+        }
+        
+        public void displayMenu() {
+            while (true) {
+                System.out.println("\\n" + "=".repeat(60));
+                System.out.println("🏛  INDIAN CULTURAL HERITAGE DATABASE");
+                System.out.println("=".repeat(60));
+                System.out.println("1. 📋 View All Heritage Sites");
+                System.out.println("2. 🔍 Search Sites");
+                System.out.println("3. 🏴 View Sites by State");
+                System.out.println("4. 🔶 Tamil Nadu Heritage Sites");
+                System.out.println("5. 🎓 Research Information");
+                System.out.println("6. ➕ Add New Site");
+                System.out.println("7. 🚪 Exit");
+                System.out.println("=".repeat(60));
+                System.out.print("Choose an option (1-7): ");
+                
+                try {
+                    int choice = scanner.nextInt();
+                    scanner.nextLine(); // consume newline
+                    
+                    switch (choice) {
+                        case 1 -> viewAllSites();
+                        case 2 -> searchSites();
+                        case 3 -> viewSitesByState();
+                        case 4 -> viewTamilNaduSites();
+                        case 5 -> showResearchInfo();
+                        case 6 -> addNewSite();
+                        case 7 -> {
+                            System.out.println("\\n🙏 Thank you for using Cultural Heritage Database!");
+                            return;
+                        }
+                        default -> System.out.println("❌ Invalid choice! Please try again.");
+                    }
+                } catch (Exception e) {
+                    System.out.println("❌ Invalid input! Please enter a number.");
+                    scanner.nextLine(); // clear invalid input
+                }
+            }
+        }
+        
+        private void viewAllSites() {
+            System.out.println("\\n" + "=".repeat(80));
+            System.out.println("📋 ALL HERITAGE SITES (" + sites.size() + " sites)");
+            System.out.println("=".repeat(80));
+            
+            for (int i = 0; i < sites.size(); i++) {
+                HeritageSite site = sites.get(i);
+                System.out.println((i + 1) + ". " + site.getName());
+                System.out.println("   📍 " + site.getLocation() + ", " + site.getState() + " | 📅 " + site.getYearBuilt() + " CE");
+                System.out.println("   🏗  " + site.getArchitecturalStyle());
+                System.out.println("   📝 " + (site.getDescription().length() > 100 ? 
+                    site.getDescription().substring(0, 100) + "..." : site.getDescription()));
+                System.out.println("   📜 " + site.getHistoricalSignificance());
+                System.out.println("-".repeat(80));
+            }
+        }
+        
+        private void searchSites() {
+            System.out.print("\\n🔍 Enter search keyword: ");
+            String keyword = scanner.nextLine().toLowerCase();
+            
+            List<HeritageSite> results = sites.stream()
+                .filter(site -> 
+                    site.getName().toLowerCase().contains(keyword) ||
+                    site.getLocation().toLowerCase().contains(keyword) ||
+                    site.getState().toLowerCase().contains(keyword) ||
+                    site.getArchitecturalStyle().toLowerCase().contains(keyword) ||
+                    site.getDescription().toLowerCase().contains(keyword) ||
+                    site.getHistoricalSignificance().toLowerCase().contains(keyword))
+                .collect(Collectors.toList());
+            
+            if (results.isEmpty()) {
+                System.out.println("❌ No sites found matching: '" + keyword + "'");
+            } else {
+                System.out.println("\\n🔍 SEARCH RESULTS (" + results.size() + " sites found)");
+                System.out.println("=".repeat(80));
+                for (int i = 0; i < results.size(); i++) {
+                    HeritageSite site = results.get(i);
+                    System.out.println((i + 1) + ". " + site);
+                }
+            }
+        }
+        
+        private void viewSitesByState() {
+            // Get unique states
+            Set<String> states = sites.stream()
+                .map(HeritageSite::getState)
+                .collect(Collectors.toSet());
+            
+            System.out.println("\\n🏴 Available States:");
+            List<String> stateList = new ArrayList<>(states);
+            for (int i = 0; i < stateList.size(); i++) {
+                System.out.println((i + 1) + ". " + stateList.get(i));
+            }
+            
+            System.out.print("\\nSelect state (1-" + stateList.size() + "): ");
+            try {
+                int stateChoice = scanner.nextInt();
+                scanner.nextLine();
+                
+                if (stateChoice < 1 || stateChoice > stateList.size()) {
+                    System.out.println("❌ Invalid choice!");
+                    return;
+                }
+                
+                String selectedState = stateList.get(stateChoice - 1);
+                List<HeritageSite> stateSites = sites.stream()
+                    .filter(site -> site.getState().equals(selectedState))
+                    .collect(Collectors.toList());
+                
+                System.out.println("\\n🏴 HERITAGE SITES IN " + selectedState.toUpperCase());
+                System.out.println("=".repeat(80));
+                for (int i = 0; i < stateSites.size(); i++) {
+                    HeritageSite site = stateSites.get(i);
+                    System.out.println((i + 1) + ". " + site);
+                }
+            } catch (Exception e) {
+                System.out.println("❌ Invalid input!");
+                scanner.nextLine();
+            }
+        }
+        
+        private void viewTamilNaduSites() {
+            List<HeritageSite> tamilNaduSites = sites.stream()
+                .filter(site -> site.getState().equals("Tamil Nadu"))
+                .collect(Collectors.toList());
+            
+            System.out.println("\\n🔶 TAMIL NADU HERITAGE SITES (" + tamilNaduSites.size() + " sites)");
+            System.out.println("=".repeat(80));
+            
+            for (int i = 0; i < tamilNaduSites.size(); i++) {
+                HeritageSite site = tamilNaduSites.get(i);
+                System.out.println("⭐ " + site.getName());
+                System.out.println("📍 " + site.getLocation() + " | 📅 " + site.getYearBuilt() + " CE");
+                System.out.println("🏗  " + site.getArchitecturalStyle());
+                System.out.println("📝 " + site.getDescription());
+                System.out.println("📜 " + site.getHistoricalSignificance());
+                System.out.println("-".repeat(80));
+            }
+        }
+        
+        private void showResearchInfo() {
+            System.out.println("\\n🎓 RESEARCH & ACADEMIC INFORMATION");
+            System.out.println("=".repeat(80));
+            System.out.println("""
+                This Cultural Heritage Database is perfect for:
+                
+                📚 FOR STUDENTS:
+                • School projects and assignments
+                • College research papers
+                • Cultural studies
+                • Architecture analysis
+                • Historical documentation
+                
+                🔬 FOR RESEARCHERS:
+                • Historical documentation
+                • Architectural studies
+                • Cultural preservation research
+                • Academic publications
+                • Heritage conservation studies
+                
+                🏛 RESEARCH TOPICS:
+                • Dravidian Architecture
+                • Mughal Architecture
+                • Temple Architecture
+                • Historical Preservation
+                • Cultural Significance
+                • UNESCO World Heritage Sites
+                • Chola Dynasty Architecture
+                • Vijayanagara Empire
+                • Pallava Architecture
+                
+                📊 DATABASE STATISTICS:
+                • Total Sites: """ + sites.size() + """
+                • Tamil Nadu Sites: """ + sites.stream().filter(s -> s.getState().equals("Tamil Nadu")).count() + """
+                • Different States: """ + sites.stream().map(HeritageSite::getState).distinct().count() + """
+                • Architectural Styles: """ + sites.stream().map(HeritageSite::getArchitecturalStyle).distinct().count() + """
+                """);
+        }
+        
+        private void addNewSite() {
+            System.out.println("\\n➕ ADD NEW HERITAGE SITE");
+            System.out.println("=".repeat(60));
+            
+            try {
+                System.out.print("🏛 Site Name: ");
+                String name = scanner.nextLine();
+                
+                System.out.print("📍 Location: ");
+                String location = scanner.nextLine();
+                
+                System.out.print("🏴 State: ");
+                String state = scanner.nextLine();
+                
+                System.out.print("📅 Year Built: ");
+                int yearBuilt = scanner.nextInt();
+                scanner.nextLine();
+                
+                System.out.print("🏗 Architectural Style: ");
+                String style = scanner.nextLine();
+                
+                System.out.print("📝 Description: ");
+                String description = scanner.nextLine();
+                
+                System.out.print("📜 Historical Significance: ");
+                String significance = scanner.nextLine();
+                
+                int newId = sites.size() + 1;
+                HeritageSite newSite = new HeritageSite(newId, name, location, state, yearBuilt, style, description, significance);
+                sites.add(newSite);
+                
+                System.out.println("\\n✅ Site added successfully!");
+                System.out.println("📊 Total sites in database: " + sites.size());
+                
+            } catch (Exception e) {
+                System.out.println("❌ Error adding site. Please check your input.");
+                scanner.nextLine();
+            }
+        }
+    }
+    
+    // Main method
+    public static void main(String[] args) {
+        System.out.println("🚀 Starting Cultural Heritage Application...");
+        System.out.println("🌐 Perfect for Students & Researchers!");
+        
+        HeritageManager manager = new HeritageManager();
+        manager.displayMenu();
+    }
+}

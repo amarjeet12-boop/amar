@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Indian Cultural Heritage — Tamil Nadu & India</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e74c3c;
+      --tamil-color: #ff6b35;
+      --light-bg: #f8f9fa;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      min-height:100vh;
+      color:#222;
+    }
+    .hero-section {
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80');
+      background-size:cover;
+      background-position:center;
+      color:white;
+      padding:80px 0;
+      text-align:center;
+    }
+    .site-card { transition: all .25s ease; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.12); }
+    .site-card:hover { transform: translateY(-6px); box-shadow:0 18px 36px rgba(0,0,0,.18); }
+    .tamil-badge { background: linear-gradient(45deg,#FF9933,#138808); color:white; padding:.25rem .5rem; border-radius:.5rem; font-weight:600; }
+    .featured-badge { background: var(--accent-color); color:white; padding:.25rem .5rem; border-radius:.5rem; }
+    .search-section { background: rgba(255,255,255,.95); border-radius:12px; padding:24px; margin-top:-40px; box-shadow:0 12px 30px rgba(0,0,0,.18); }
+    .stats-card { background:white; border-radius:8px; padding:16px; text-align:center; box-shadow:0 6px 14px rgba(0,0,0,.08); }
+    .stats-number { font-size:2rem; font-weight:700; color:var(--secondary-color); }
+    footer.footer { background:var(--primary-color); color:white; padding:40px 0; margin-top:40px; }
+    .modal-content { border-radius:12px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fas fa-landmark"></i> 🇮🇳 Indian Cultural Heritage</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tamilnadu">Tamil Nadu</a></li>
+          <li class="nav-item"><a class="nav-link" href="#india">All India</a></li>
+          <li class="nav-item"><a class="nav-link" href="#research">Research</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero-section" id="home">
+    <div class="container">
+      <h1 class="display-5 fw-bold">Explore India's Cultural Heritage — Featured Sites</h1>
+      <p class="lead">Famous heritage sites of Tamil Nadu and across India — useful for students and researchers</p>
+      <div class="row mt-4">
+        <div class="col-6 col-md-3">
+          <div class="stats-card">
+            <div class="stats-number" id="totalSites">0</div>
+            <div>Total Sites</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stats-card">
+            <div class="stats-number" id="tamilSites">0</div>
+            <div>Tamil Nadu Sites</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stats-card">
+            <div class="stats-number" id="totalStates">0</div>
+            <div>States</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stats-card">
+            <div class="stats-number" id="archStyles">0</div>
+            <div>Architectural Styles</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="search-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="input-group input-group-lg">
+            <input id="searchInput" class="form-control" placeholder="Search by name, location, style..." aria-label="Search">
+            <button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> Search</button>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3" id="stateFilters"></div>
+    </div>
+  </section>
+
+  <main class="container mt-5">
+    <h3 id="sectionTitle" class="mb-4">⭐ Featured Historical Sites</h3>
+
+    <div class="row" id="sitesContainer"></div>
+
+    <div class="mt-5">
+      <h3 id="tnHeading">🔶 Tamil Nadu Heritage Sites</h3>
+      <div class="row" id="tamilnaduContainer"></div>
+    </div>
+
+    <div class="mt-5">
+      <h3 id="indiaHeading">🌐 All India (Other States) Heritage Sites</h3>
+      <div class="row" id="indiaContainer"></div>
+    </div>
+
+    <div id="noResults" class="text-center mt-4" style="display:none;">
+      <i class="fas fa-search fa-3x text-muted"></i>
+      <h4>No historical sites found</h4>
+      <p class="text-muted">Try adjusting your search criteria or view all sites.</p>
+      <button class="btn btn-primary" onclick="loadAllSites()">View All Sites</button>
+    </div>
+  </main>
+
+  <section class="research-section container mt-5" id="research">
+    <h3 class="mb-4">🎓 Research & Academic Portal</h3>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-3"><div class="card-body">
+          <h5><i class="fas fa-graduation-cap"></i> For Students</h5>
+          <ul><li>School projects</li><li>College research</li><li>Architecture analysis</li></ul>
+        </div></div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-3"><div class="card-body">
+          <h5><i class="fas fa-microscope"></i> For Researchers</h5>
+          <ul><li>Historical documentation</li><li>Conservation studies</li></ul>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4"><h5>🏛 Indian Cultural Heritage</h5><p>Preserving and promoting heritage for students & researchers.</p></div>
+        <div class="col-md-4"><h5>Quick Links</h5><ul class="list-unstyled"><li><a href="#home" class="text-light">Home</a></li></ul></div>
+        <div class="col-md-4"><h5>Contact</h5><p class="mb-0">info@culturalheritage.com</p></div>
+      </div>
+      <hr class="bg-light">
+      <div class="text-center small">&copy; 2025 Indian Cultural Heritage</div>
+    </div>
+  </footer>
+
+  <!-- Site Details Modal -->
+  <div class="modal fade" id="siteDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title" id="detailsModalTitle">Site Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="siteDetailsContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Sample data (same as your original)
+    const heritageSites = [
+      { id:1, name:"Brihadeeswarar Temple", location:"Thanjavur", state:"Tamil Nadu", yearBuilt:1010, architecturalStyle:"Dravidian Architecture", description:"The Brihadeeswarar Temple... (full description)", historicalSignificance:"UNESCO World Heritage Site, represents the golden age of Chola architecture" },
+      { id:2, name:"Meenakshi Amman Temple", location:"Madurai", state:"Tamil Nadu", yearBuilt:1190, architecturalStyle:"Dravidian Architecture", description:"The Meenakshi Amman Temple is a historic Hindu temple...", historicalSignificance:"One of the most prominent landmarks of Tamil Nadu" },
+      { id:3, name:"Mahabalipuram Group of Monuments", location:"Mahabalipuram", state:"Tamil Nadu", yearBuilt:700, architecturalStyle:"Dravidian Architecture", description:"A collection of 7th- and 8th-century CE religious monuments...", historicalSignificance:"UNESCO World Heritage Site" },
+      { id:4, name:"Taj Mahal", location:"Agra", state:"Uttar Pradesh", yearBuilt:1653, architecturalStyle:"Mughal Architecture", description:"An ivory-white marble mausoleum...", historicalSignificance:"UNESCO World Heritage Site" },
+      { id:5, name:"Hampi Monuments", location:"Hampi", state:"Karnataka", yearBuilt:1336, architecturalStyle:"Vijayanagara Architecture", description:"Contains numerous ruined temple complexes...", historicalSignificance:"UNESCO World Heritage Site" }
+    ];
+
+    // DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAllSites();
+      updateStats();
+      initializeStateFilters();
+
+      // Wire search controls
+      document.getElementById('searchBtn').addEventListener('click', searchSites);
+      document.getElementById('searchInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') searchSites();
+      });
+    });
+
+    function displaySites(sites, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      if (sites.length === 0) {
+        container.innerHTML = '<div class="col-12 text-center text-muted">No sites to display.</div>';
+        return;
+      }
+      container.innerHTML = sites.map(site => `
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card site-card h-100">
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0">${site.name}</h5>
+                ${site.state === 'Tamil Nadu' ? '<span class="tamil-badge">TN</span>' : ''}
+              </div>
+              <p class="text-muted small mb-1"><i class="fas fa-map-marker-alt"></i> ${site.location}, ${site.state}</p>
+              <p class="mb-3">${site.description.length > 110 ? site.description.substring(0,110) + '...' : site.description}</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center">
+                <small class="text-muted"><i class="fas fa-calendar-alt"></i> ${site.yearBuilt} CE</small>
+                <button class="btn btn-sm btn-primary" onclick="showSiteDetails(${site.id})"><i class="fas fa-info-circle"></i> Details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadAllSites() {
+      document.getElementById('sectionTitle').textContent = '⭐ All Featured Historical Sites';
+      displaySites(heritageSites, 'sitesContainer');
+      document.getElementById('searchInput').value = '';
+      document.getElementById('noResults').style.display = 'none';
+      // Also populate Tamil Nadu and India sections
+      loadTamilNaduSites();
+      loadIndiaSites();
+    }
+
+    function searchSites() {
+      const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!keyword) { loadAllSites(); return; }
+      const results = heritageSites.filter(site =>
+        site.name.toLowerCase().includes(keyword) ||
+        site.location.toLowerCase().includes(keyword) ||
+        site.state.toLowerCase().includes(keyword) ||
+        site.architecturalStyle.toLowerCase().includes(keyword) ||
+        site.description.toLowerCase().includes(keyword) ||
+        site.historicalSignificance.toLowerCase().includes(keyword)
+      );
+      if (results.length === 0) {
+        document.getElementById('sitesContainer').innerHTML = '';
+        document.getElementById('noResults').style.display = 'block';
+      } else {
+        document.getElementById('noResults').style.display = 'none';
+        displaySites(results, 'sitesContainer');
+      }
+      document.getElementById('sectionTitle').textContent = `🔍 Search Results (${results.length} sites found)`;
+    }
+
+    function initializeStateFilters() {
+      const states = [...new Set(heritageSites.map(s => s.state))].sort();
+      const container = document.getElementById('stateFilters');
+      container.innerHTML = states.map(state => `
+        <div class="col-auto mb-2">
+          <button class="btn ${state === 'Tamil Nadu' ? 'btn-warning' : 'btn-outline-primary'} btn-sm" onclick="filterByState('${state.replace(/'/g,"\\'")}')">${state}</button>
+        </div>
+      `).join('');
+    }
+
+    function filterByState(state) {
+      const filtered = heritageSites.filter(s => s.state === state);
+      displaySites(filtered, 'sitesContainer');
+      document.getElementById('sectionTitle').textContent = `🏴 Historical Sites in ${state}`;
+      document.getElementById('noResults').style.display = filtered.length ? 'none' : 'block';
+    }
+
+    function showSiteDetails(siteId) {
+      const site = heritageSites.find(s => s.id === siteId);
+      if (!site) return;
+      document.getElementById('detailsModalTitle').textContent = site.name;
+      document.getElementById('siteDetailsContent').innerHTML = `
+        <div class="row">
+          <div class="col-md-8">
+            <p><strong>📍 Location:</strong> ${site.location}, ${site.state}</p>
+            <p><strong>📅 Year Built:</strong> ${site.yearBuilt} CE</p>
+            <p><strong>🏗 Architectural Style:</strong> ${site.architecturalStyle}</p>
+            <h6>📝 Description</h6><p>${site.description}</p>
+            <h6>📜 Historical Significance</h6><p>${site.historicalSignificance}</p>
+          </div>
+          <div class="col-md-4">
+            <div class="card"><div class="card-body text-center">
+              <h6>🎓 Research Material</h6>
+              <p class="small text-muted">Useful for academic and cultural research</p>
+              <button class="btn btn-outline-primary w-100 mb-2" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+            </div></div>
+          </div>
+        </div>
+      `;
+      new bootstrap.Modal(document.getElementById('siteDetailsModal')).show();
+    }
+
+    function updateStats() {
+      document.getElementById('totalSites').textContent = heritageSites.length;
+      document.getElementById('tamilSites').textContent = heritageSites.filter(s => s.state === 'Tamil Nadu').length;
+      document.getElementById('totalStates').textContent = new Set(heritageSites.map(s => s.state)).size;
+      document.getElementById('archStyles').textContent = new Set(heritageSites.map(s => s.architecturalStyle)).size;
+    }
+
+    function loadTamilNaduSites() {
+      const tn = heritageSites.filter(s => s.state === 'Tamil Nadu');
+      displaySites(tn, 'tamilnaduContainer');
+      document.getElementById('tnHeading').textContent = `🔶 Tamil Nadu Heritage Sites (${tn.length})`;
+    }
+
+    function loadIndiaSites() {
+      const others = heritageSites.filter(s => s.state !== 'Tamil Nadu');
+      displaySites(others, 'indiaContainer');
+      document.getElementById('indiaHeading').textContent = `🌐 All India (Other States) Heritage Sites (${others.length})`;
+    }
+  </script>
+</body>
+</html>
